@@ -8,7 +8,6 @@ public class WinFirstLogin extends javax.swing.JFrame {
     public WinFirstLogin() {
         initComponents();
         this.setLocationRelativeTo(null);
-        this.setVisible(false);
         this.verificaPrimeiroLogin();
         
 
@@ -28,7 +27,7 @@ public class WinFirstLogin extends javax.swing.JFrame {
             setFirstMessage();
             this.setVisible(true);
         } else {
-
+            this.dispose();
             login.setVisible(true);
         }
     }
@@ -214,7 +213,7 @@ public class WinFirstLogin extends javax.swing.JFrame {
         System.out.println(cpf);
         System.out.println(cpf.length());
         if (!nome.equals("") && !pass.equals("") && !cpf.equals("")) {
-            Usuarios usu = new Usuarios(1, nome, cpf, pass, acesso, email);
+            Usuarios usu = new Usuarios(1, cpf, nome, pass, acesso, email);
             SMSDAO dao = new SMSDAO();
             dao.addUsuario(usu);
         }

@@ -1,11 +1,7 @@
 package windows;
 
-import dados.Login;
-
-/**
- *
- * @author Zurawski
- */
+import dados.*;
+import javax.swing.JOptionPane;
 public class BrwLogin extends javax.swing.JFrame {
 
     public BrwLogin() {
@@ -15,23 +11,21 @@ public class BrwLogin extends javax.swing.JFrame {
     }
     
     
-    public void setAcessoLogin(String usuario)
+    public boolean setAcessoLogin(String usuario, String senha)
     {
-        if (usuario.equals("zurawski"))
+        SMSDAO dao = new SMSDAO();
+        boolean findUsuario = dao.findUsuario(usuario, senha);
+        
+        if (findUsuario == true)
         {
-            Login.acesso = 1;
+            return true;
         }
         else
         {
-            Login.acesso = 0;
+            return false;
         } 
     }
-    
-    private void detectaPrimeiroLogin()
-    {
-        
-    }
-            
+             
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -115,11 +109,19 @@ public class BrwLogin extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         String usuario = tbx_login.getText();
         String Senha = tbx_senha.getText();
+        boolean acess;
         Login.login = usuario;
-        setAcessoLogin(usuario);
+        acess = setAcessoLogin(usuario,Senha);
+        if (acess)
+        {
         MainPrincipal main = new MainPrincipal();
         main.setVisible(true);
         this.dispose();
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Conta Inválida", "Erro ao efetuar o login.", 1);
+        }
 
 
 

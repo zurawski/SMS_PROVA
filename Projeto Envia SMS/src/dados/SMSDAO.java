@@ -38,6 +38,7 @@ public class SMSDAO {
      * Selects
      */
     private static final String getUsuarios = "select * from USUARIOS";
+    private static final String findUsuario = "select * from USUARIOS where nome = ? and senha = ?";
 
     private Connection connect() throws IOException, FileNotFoundException, SQLException {
         Connection con;
@@ -237,43 +238,87 @@ public class SMSDAO {
         }
         return true;
     }
-    
-    public ArrayList<String> fillComboGrupos()
-    {
+
+    public ArrayList<String> fillComboGrupos() {
         String selectGrupos = "select nome from GRUPOS";
         PreparedStatement stmt = null;
-		ResultSet rs = null;
-		Connection con = null;
-                ArrayList<String> list = new ArrayList<String>();
-		try {
-			con = DriverManager.getConnection(
-					"jdbc:postgresql://localhost:5432/SMS", "postgres",
-					"senacrs");
+        ResultSet rs = null;
+        Connection con = null;
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            con = DriverManager.getConnection(
+                    "jdbc:postgresql://localhost:5432/SMS", "postgres",
+                    "senacrs");
 
-			stmt = con.prepareStatement(selectGrupos);
-			rs = stmt.executeQuery();
-			while (rs.next()) 
-                        {
-				String nome = rs.getString("nome");
-                                list.add(nome);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (stmt != null) {
-					stmt.close();
-				}
-				if (rs != null) {
-					stmt.close();
-				}
-				if (con != null) {
-					stmt.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+            stmt = con.prepareStatement(selectGrupos);
+            rs = stmt.executeQuery();
+            while (rs.next()) {
+                String nome = rs.getString("nome");
+                list.add(nome);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         return list;
+    }
+
+    public boolean findUsuario(String numero, String senha) {
+        if (numero == null) {
+            throw new IllegalArgumentException(
+                    "O número da conta não pode ser null.");
+        }
+        if (senha == null) {
+            throw new IllegalArgumentException(
+                    "A senha da conta não pode ser null.");
+        }
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Connection con = null;
+        try {
+            con = connect();
+
+            stmt = con.prepareStatement(findUsuario);
+            stmt.setString(1, numero);
+            stmt.setString(2, senha);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // FIXME: comunicar erro ao programa cliente
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (rs != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    stmt.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                // FIXME: comunicar erro ao programa cliente
+            }
+        }
+        return false;
     }
 }

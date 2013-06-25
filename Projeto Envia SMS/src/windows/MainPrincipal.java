@@ -16,7 +16,7 @@ public class MainPrincipal extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setButtonSMS();
-        this.verificaAcessoUsuarioLogado();
+   
     }
 
     private void maximizaWindow() {
@@ -25,18 +25,7 @@ public class MainPrincipal extends javax.swing.JFrame {
         this.setSize(tela.width - 10, tela.height - 50);
     }
     
-    public void verificaAcessoUsuarioLogado()
-    {
-        if (!(Login.acesso.equals(1)))
-        {
-            jAdminPainel.setVisible(false);
-        }
-        else
-        {
-            jAdminPainel.setVisible(true);
-        }
-    }
-    
+
     private void setButtonSMS()
     {
         ImageIcon addContact = new ImageIcon("resources/img/"+"addContato.png");
